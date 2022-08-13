@@ -1,7 +1,6 @@
 name: flutter_upollo
 description: A new Flutter plugin project.
 version: 0.0.1
-author: Epseelon
 homepage: https://github.com/epseelon/flutter_upollo
 
 environment:
@@ -42,9 +41,9 @@ flutter:
         pluginClass: FlutterUpolloPlugin
       ios:
         pluginClass: FlutterUpolloPlugin
-      web:
-        pluginClass: FlutterUpolloWeb
-        fileName: flutter_upollo_web.dart
+      #web:
+        #pluginClass: FlutterUpolloWeb
+        #fileName: flutter_upollo_web.dart
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

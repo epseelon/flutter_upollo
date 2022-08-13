@@ -2,6 +2,12 @@
 
 A new Flutter plugin project.
 
+Minimum Android SDK: 21
+Minimum iOS version: 12.0
+Run example with:
+
+--dart-define=UPOLLO_KEY=[Public API Key from Upollo dashboard without squared brackets]
+
 ## Getting Started
 
 This project is a starting point for a Flutter

@@ -23,4 +23,12 @@ class FlutterUpolloWeb extends FlutterUpolloPlatform {
     final version = html.window.navigator.userAgent;
     return version;
   }
+
+  /*@override
+  Future<Function> init({
+    required String publicApiKey,
+    Map<String, String>? options,
+  }) {
+    //TODO
+  }*/
 }

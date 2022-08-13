@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_upollo/flutter_upollo.dart';
 
 void main() {
@@ -16,34 +16,57 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  final _flutterUpolloPlugin = FlutterUpollo();
+  bool _doingSomething = false;
+  bool _upolloInitialized = false;
+
+  EventType _eventType = EventType.login;
+  String _userId = "123";
+  String _userEmail = "john@epseelon.com";
+  String _result = "";
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    initUpollo();
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-    try {
-      platformVersion =
-          await _flutterUpolloPlugin.getPlatformVersion() ?? 'Unknown platform version';
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
+  Future<void> initUpollo() async {
+    await FlutterUpollo.init(
+      publicApiKey: const String.fromEnvironment('UPOLLO_KEY'),
+    );
 
     setState(() {
-      _platformVersion = platformVersion;
+      _upolloInitialized = true;
+    });
+  }
+
+  Future<void> _assess() async {
+    setState(() {
+      _result = "";
+      _doingSomething = true;
+    });
+    final result = await FlutterUpollo.instance.assess(
+      eventType: _eventType,
+      userInfo: UserInfo(userId: _userId, userEmail: _userEmail),
+    );
+    setState(() {
+      _doingSomething = false;
+      _result = result.toString();
+    });
+  }
+
+  Future<void> _track() async {
+    setState(() {
+      _result = "";
+      _doingSomething = true;
+    });
+    final result = await FlutterUpollo.instance.track(
+      eventType: _eventType,
+      userInfo: UserInfo(userId: _userId, userEmail: _userEmail),
+    );
+    setState(() {
+      _doingSomething = false;
+      _result = result.toString();
     });
   }
 
@@ -52,10 +75,73 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('Flutter Upollo Example'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: _upolloInitialized && !_doingSomething
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TextFormField(
+                        initialValue: _userId,
+                        decoration: const InputDecoration(
+                          labelText: 'User ID',
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            _userId = value;
+                          });
+                        },
+                      ),
+                      TextFormField(
+                        initialValue: _userEmail,
+                        decoration: const InputDecoration(
+                          labelText: 'User email',
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        onChanged: (value) {
+                          setState(() {
+                            _userEmail = value;
+                          });
+                        },
+                      ),
+                      DropdownButtonFormField<EventType>(
+                          value: _eventType,
+                          items: EventType.values
+                              .map(
+                                (e) => DropdownMenuItem<EventType>(
+                                  value: e,
+                                  child: Text(e.name),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              _eventType = value!;
+                            });
+                          }),
+                      ElevatedButton(
+                        onPressed: _track,
+                        child: const Text('Track'),
+                      ),
+                      ElevatedButton(
+                        onPressed: _assess,
+                        child: const Text('Assess'),
+                      ),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(_result),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : const CircularProgressIndicator(),
         ),
       ),
     );

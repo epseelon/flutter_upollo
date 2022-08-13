@@ -1,0 +1,37 @@
+PODS:
+  - Flutter (1.0.0)
+  - flutter_upollo (0.0.1):
+    - Flutter
+    - Userwatch (~> 0.1.0)
+  - SwiftProtobuf (1.19.1)
+  - Userwatch (0.1.0):
+    - SwiftProtobuf (~> 1.19)
+    - UserwatchCore (= 0.1.0)
+  - UserwatchCore (0.1.0)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - flutter_upollo (from `.symlinks/plugins/flutter_upollo/ios`)
+
+SPEC REPOS:
+  trunk:
+    - SwiftProtobuf
+    - Userwatch
+    - UserwatchCore
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  flutter_upollo:
+    :path: ".symlinks/plugins/flutter_upollo/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  flutter_upollo: 87bd0f13dab118f260248725d9fbb0fc722f75ab
+  SwiftProtobuf: 59d9ea2eb5f84b509f32d170a65f3348ae758f1e
+  Userwatch: 2726d997adcab267cf12bd9e72140ce1e4e541ba
+  UserwatchCore: 152ac3bf95f1a7bceb55ced8d1618df6996109a9
+
+PODFILE CHECKSUM: 4e8f8b2be68aeea4c0d5beb6ff1e79fface1d048
+
+COCOAPODS: 1.11.3

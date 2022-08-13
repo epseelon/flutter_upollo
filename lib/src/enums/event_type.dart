@@ -1,0 +1,23 @@
+enum EventType {
+  unspecified,
+  login,
+  register,
+  attemptPurchase,
+  completePurchase,
+  attemptRedeemOffer,
+  redeemedOffer,
+  verifyDevice,
+  reportDevice,
+  addTeamMember,
+  removeTeamMember,
+  addPaymentMethod,
+  attemptDeleteAccount,
+  customerDefined,
+  startSubscription,
+  endSubscription,
+  heartbeat,
+  pageVisit,
+  loginSuccess,
+  registerSuccess,
+  internal;
+}
