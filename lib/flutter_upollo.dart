@@ -43,10 +43,8 @@ export 'src/models/user_info.dart';
 class FlutterUpollo {
   static FlutterUpolloPlatform get instance => FlutterUpolloPlatform.instance;
 
-  Future<String?> getPlatformVersion() {
-    return instance.getPlatformVersion();
-  }
-
+  /// Shortcut for instance.init().
+  /// [publicApiKey] is the public API key for your Upollo account.
   static Future<void> init({required String publicApiKey}) {
     return instance.init(publicApiKey: publicApiKey);
   }

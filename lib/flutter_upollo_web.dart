@@ -26,7 +26,7 @@
 // of your plugin as a separate package, instead of inlining it in the same
 // package as the core of your plugin.
 // ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html show window;
+//import 'dart:html' as html show window;
 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
@@ -39,13 +39,6 @@ class FlutterUpolloWeb extends FlutterUpolloPlatform {
 
   static void registerWith(Registrar registrar) {
     FlutterUpolloPlatform.instance = FlutterUpolloWeb();
-  }
-
-  /// Returns a [String] containing the version of the platform.
-  @override
-  Future<String?> getPlatformVersion() async {
-    final version = html.window.navigator.userAgent;
-    return version;
   }
 
   /*@override

@@ -31,8 +31,8 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 class MockFlutterUpolloPlatform
     with MockPlatformInterfaceMixin
     implements FlutterUpolloPlatform {
-  @override
-  Future<String?> getPlatformVersion() => Future.value('42');
+  /*@override
+  Future<String?> getPlatformVersion() => Future.value('42');*/
 
   @override
   Future<void> init(
@@ -63,11 +63,11 @@ void main() {
     expect(initialPlatform, isInstanceOf<MethodChannelFlutterUpollo>());
   });
 
-  test('getPlatformVersion', () async {
+  /*test('getPlatformVersion', () async {
     FlutterUpollo flutterUpolloPlugin = FlutterUpollo();
     MockFlutterUpolloPlatform fakePlatform = MockFlutterUpolloPlatform();
     FlutterUpolloPlatform.instance = fakePlatform;
 
     expect(await flutterUpolloPlugin.getPlatformVersion(), '42');
-  });
+  });*/
 }

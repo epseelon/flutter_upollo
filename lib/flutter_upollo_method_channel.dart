@@ -38,13 +38,6 @@ class MethodChannelFlutterUpollo extends FlutterUpolloPlatform {
   final methodChannel = const MethodChannel('flutter_upollo');
 
   @override
-  Future<String?> getPlatformVersion() async {
-    final version =
-        await methodChannel.invokeMethod<String>('getPlatformVersion');
-    return version;
-  }
-
-  @override
   Future<void> init({
     required String publicApiKey,
     Map<String, String>? options,

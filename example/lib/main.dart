@@ -27,7 +27,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_upollo/flutter_upollo.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterUpollo.init(
+    publicApiKey: const String.fromEnvironment('UPOLLO_KEY'),
+  );
   runApp(const MyApp());
 }
 
@@ -40,7 +44,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool _doingSomething = false;
-  bool _upolloInitialized = false;
 
   EventType _eventType = EventType.login;
   String _userId = "123";
@@ -50,17 +53,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    initUpollo();
-  }
-
-  Future<void> initUpollo() async {
-    await FlutterUpollo.init(
-      publicApiKey: const String.fromEnvironment('UPOLLO_KEY'),
-    );
-
-    setState(() {
-      _upolloInitialized = true;
-    });
   }
 
   Future<void> _assess() async {
@@ -72,6 +64,7 @@ class _MyAppState extends State<MyApp> {
       eventType: _eventType,
       userInfo: UserInfo(userId: _userId, userEmail: _userEmail),
     );
+
     setState(() {
       _doingSomething = false;
       _result = result.toString();
@@ -101,7 +94,7 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Flutter Upollo Example'),
         ),
         body: Center(
-          child: _upolloInitialized && !_doingSomething
+          child: !_doingSomething
               ? Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(

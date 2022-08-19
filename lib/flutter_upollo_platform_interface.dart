@@ -51,20 +51,25 @@ abstract class FlutterUpolloPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
-  }
-
+  /// Initializes the FlutterUpollo library.
   Future<void> init(
       {required String publicApiKey, Map<String, String>? options}) {
     throw UnimplementedError('init() has not been implemented.');
   }
 
-  Future<AnalysisResponse?> assess(
-      {required UserInfo userInfo, required EventType eventType}) {
+  /// Inform Upollo of an event in your client application, and get back
+  /// an immediate assessment of the user
+  /// Include any [userInfo] you have, or an empty [UserInfo] if you have none.
+  Future<AnalysisResponse?> assess({
+    required UserInfo userInfo,
+    required EventType eventType,
+  }) {
     throw UnimplementedError('trackLogin() has not been implemented.');
   }
 
+  /// Inform Upollo of an event in your client application, and get back
+  /// a receipt in the form of an EventToken.
+  /// Include any [userInfo] you have, or an empty [UserInfo] if you have none.
   Future<EventResponse?> track(
       {required UserInfo userInfo, required EventType eventType}) {
     throw UnimplementedError('trackLogin() has not been implemented.');

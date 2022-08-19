@@ -24,10 +24,10 @@
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_upollo/flutter_upollo_method_channel.dart';
+//import 'package:flutter_upollo/flutter_upollo_method_channel.dart';
 
 void main() {
-  MethodChannelFlutterUpollo platform = MethodChannelFlutterUpollo();
+  //MethodChannelFlutterUpollo platform = MethodChannelFlutterUpollo();
   const MethodChannel channel = MethodChannel('flutter_upollo');
 
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -42,7 +42,7 @@ void main() {
     channel.setMockMethodCallHandler(null);
   });
 
-  test('getPlatformVersion', () async {
+  /*test('getPlatformVersion', () async {
     expect(await platform.getPlatformVersion(), '42');
-  });
+  });*/
 }
