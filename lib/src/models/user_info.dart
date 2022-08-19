@@ -25,11 +25,22 @@
 import 'physical_address.dart';
 
 class UserInfo {
+  /// The user's unique identifier.
   final String? userId;
+
+  /// The user's email address.
   final String? userEmail;
+
+  /// The user's phone number.
   final String? userPhone;
+
+  /// The user's name.
   final String? userName;
+
+  /// The URL of the user's profile picture.
   final String? userImage;
+
+  /// Some custom values about the user.
   final dynamic customerSuppliedValues;
 
   /// Address information, this would typically be shipping or home address
