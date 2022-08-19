@@ -1,7 +1,32 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Epseelon OÜ
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.epseelon.flutter_upollo
 
 import android.content.Context
 import androidx.annotation.NonNull
+import co.userwatch.a.m0
 import co.userwatch.android.UserwatchClient
 import co.userwatch.proto.*
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -46,13 +71,29 @@ class FlutterUpolloPlugin : FlutterPlugin, MethodCallHandler {
                     if (userInfoMap == null) {
                         result.error("MISSING_USER_INFO", "userInfo is not specified", null)
                     } else {
+                        val csvMap = userInfoMap["customerSuppliedValues"]
+                        val addressList = userInfoMap["addresses"]
+
+                        @Suppress("UNCHECKED_CAST")
                         val userInfo = userInfo {
                             userId = userInfoMap["userId"] as String? ?: ""
                             userName = userInfoMap["userName"] as String? ?: ""
                             userEmail = userInfoMap["userEmail"] as String? ?: ""
                             userImage = userInfoMap["userImage"] as String? ?: ""
                             userPhone = userInfoMap["userPhone"] as String? ?: ""
-                            //FIXME customerSuppliedValues
+                            if (csvMap != null && csvMap is Map<*, *> && csvMap.isNotEmpty()) {
+                                customerSuppliedValues.putAll(csvMap as Map<String, String>)
+                            }
+                            if (addressList != null && addressList is List<*> && addressList.isNotEmpty()) {
+                                addresses.addAll((addressList as List<Map<String, Any>>).map {
+                                    val addrMap = it["address"] as Map<String, Any>
+
+                                    physicalAddress {
+                                        type = AddressType.forNumber(it["type"] as Int)
+                                        address = m0()
+                                    }
+                                })
+                            }
                             //FIXME addresses
                         }
                         userwatch!!.assess(userInfo, eventType)

@@ -22,27 +22,29 @@
  * SOFTWARE.
  */
 
-import 'package:flutter/services.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_upollo/flutter_upollo_method_channel.dart';
+class EventResponse {
+  /// A token which can be sent to your own server so it can dig into the
+  /// assessment of a user following events being reported for tracking by
+  /// your client application.
+  final String eventToken;
 
-void main() {
-  MethodChannelFlutterUpollo platform = MethodChannelFlutterUpollo();
-  const MethodChannel channel = MethodChannel('flutter_upollo');
+  //reserved "validation_signature";
 
-  TestWidgetsFlutterBinding.ensureInitialized();
-
-  setUp(() {
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      return '42';
-    });
+  EventResponse({
+    required this.eventToken,
   });
 
-  tearDown(() {
-    channel.setMockMethodCallHandler(null);
-  });
+  static EventResponse? fromJson(dynamic json) {
+    if (json == null) {
+      return null;
+    }
+    return EventResponse(
+      eventToken: json['eventToken'],
+    );
+  }
 
-  test('getPlatformVersion', () async {
-    expect(await platform.getPlatformVersion(), '42');
-  });
+  @override
+  String toString() {
+    return 'EventResponse{eventToken: $eventToken}';
+  }
 }

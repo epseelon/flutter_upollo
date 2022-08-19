@@ -22,27 +22,27 @@
  * SOFTWARE.
  */
 
-import 'package:flutter/services.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_upollo/flutter_upollo_method_channel.dart';
+class LatLng {
+  final double latitude;
+  final double longitude;
 
-void main() {
-  MethodChannelFlutterUpollo platform = MethodChannelFlutterUpollo();
-  const MethodChannel channel = MethodChannel('flutter_upollo');
-
-  TestWidgetsFlutterBinding.ensureInitialized();
-
-  setUp(() {
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      return '42';
-    });
+  LatLng({
+    required this.latitude,
+    required this.longitude,
   });
 
-  tearDown(() {
-    channel.setMockMethodCallHandler(null);
-  });
+  static LatLng? fromJson(dynamic json) {
+    if (json == null) {
+      return null;
+    }
+    return LatLng(
+      latitude: json['latitude'] as double,
+      longitude: json['longitude'] as double,
+    );
+  }
 
-  test('getPlatformVersion', () async {
-    expect(await platform.getPlatformVersion(), '42');
-  });
+  @override
+  String toString() {
+    return 'LatLng{latitude: $latitude, longitude: $longitude}';
+  }
 }

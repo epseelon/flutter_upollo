@@ -22,27 +22,35 @@
  * SOFTWARE.
  */
 
-import 'package:flutter/services.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_upollo/flutter_upollo_method_channel.dart';
+import '../enums/address_type.dart';
+import 'postal_address.dart';
 
-void main() {
-  MethodChannelFlutterUpollo platform = MethodChannelFlutterUpollo();
-  const MethodChannel channel = MethodChannel('flutter_upollo');
+class PhysicalAddress {
+  final AddressType type;
+  final PostalAddress address;
 
-  TestWidgetsFlutterBinding.ensureInitialized();
-
-  setUp(() {
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      return '42';
-    });
+  PhysicalAddress({
+    required this.type,
+    required this.address,
   });
 
-  tearDown(() {
-    channel.setMockMethodCallHandler(null);
-  });
+  static PhysicalAddress? fromJson(dynamic json) {
+    if (json == null) return null;
+    return PhysicalAddress(
+      type: AddressType.values[json['type'] as int],
+      address: PostalAddress.fromJson(json['address'] as Map<String, dynamic>)!,
+    );
+  }
 
-  test('getPlatformVersion', () async {
-    expect(await platform.getPlatformVersion(), '42');
-  });
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type.index,
+      'address': address.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    return 'PhysicalAddress{type: $type, address: $address}';
+  }
 }

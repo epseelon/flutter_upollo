@@ -22,27 +22,42 @@
  * SOFTWARE.
  */
 
-import 'package:flutter/services.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_upollo/flutter_upollo_method_channel.dart';
+import 'lat_lng.dart';
 
-void main() {
-  MethodChannelFlutterUpollo platform = MethodChannelFlutterUpollo();
-  const MethodChannel channel = MethodChannel('flutter_upollo');
+class GeoInfo {
+  final LatLng? geoIpLatLng;
+  final String geoIpCity;
+  final String geoIpSubregion;
+  final String geoIpRegion;
+  final DateTime? lastHere;
 
-  TestWidgetsFlutterBinding.ensureInitialized();
-
-  setUp(() {
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      return '42';
-    });
+  GeoInfo({
+    required this.geoIpLatLng,
+    required this.geoIpCity,
+    required this.geoIpSubregion,
+    required this.geoIpRegion,
+    required this.lastHere,
   });
 
-  tearDown(() {
-    channel.setMockMethodCallHandler(null);
-  });
+  static GeoInfo? fromJson(dynamic json) {
+    if (json == null) {
+      return null;
+    }
+    return GeoInfo(
+      geoIpLatLng: json['geoIpLatLng'] == null
+          ? null
+          : LatLng.fromJson(json['geoIpLatLng']),
+      geoIpCity: json['geoIpCity'] as String,
+      geoIpSubregion: json['geoIpSubregion'] as String,
+      geoIpRegion: json['geoIpRegion'] as String,
+      lastHere: json['lastHere'] == null
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(json['lastHere'] as int),
+    );
+  }
 
-  test('getPlatformVersion', () async {
-    expect(await platform.getPlatformVersion(), '42');
-  });
+  @override
+  String toString() {
+    return 'GeoInfo{geoIpLatLng: $geoIpLatLng, geoIpCity: $geoIpCity, geoIpSubregion: $geoIpSubregion, geoIpRegion: $geoIpRegion, lastHere: $lastHere}';
+  }
 }
