@@ -29,6 +29,7 @@ import androidx.annotation.NonNull
 import co.userwatch.a.m0
 import co.userwatch.android.UserwatchClient
 import co.userwatch.proto.*
+import com.google.type.postalAddress
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -85,16 +86,31 @@ class FlutterUpolloPlugin : FlutterPlugin, MethodCallHandler {
                                 customerSuppliedValues.putAll(csvMap as Map<String, String>)
                             }
                             if (addressList != null && addressList is List<*> && addressList.isNotEmpty()) {
-                                addresses.addAll((addressList as List<Map<String, Any>>).map {
-                                    val addrMap = it["address"] as Map<String, Any>
+                                addresses.addAll((addressList as List<Map<String, Any>>).map { physicalAddressMap ->
+                                    val postalAddressMap = physicalAddressMap["address"] as Map<String, Any>
 
                                     physicalAddress {
-                                        type = AddressType.forNumber(it["type"] as Int)
-                                        address = m0()
+                                        type = AddressType.forNumber(physicalAddressMap["type"] as Int)
+                                        address = postalAddress {
+                                            revision = postalAddressMap["revision"] as Int
+                                            regionCode = postalAddressMap["regionCode"] as String
+                                            languageCode = postalAddressMap["languageCode"] as String? ?: ""
+                                            postalCode = postalAddressMap["postalCode"] as String? ?: ""
+                                            sortingCode = postalAddressMap["sortingCode"] as String? ?: ""
+                                            administrativeArea = postalAddressMap["administrativeArea"] as String? ?: ""
+                                            locality = postalAddressMap["locality"] as String? ?: ""
+                                            sublocality = postalAddressMap["sublocality"] as String? ?: ""
+                                            if(postalAddressMap["addressLines"] != null) {
+                                                addressLines.addAll(postalAddressMap["addressLines"] as List<String>)
+                                            }
+                                            if(postalAddressMap["recipients"] != null) {
+                                                recipients.addAll(postalAddressMap["recipients"] as List<String>)
+                                            }
+                                            organization = postalAddressMap["organization"] as String? ?: ""
+                                        }
                                     }
                                 })
                             }
-                            //FIXME addresses
                         }
                         userwatch!!.assess(userInfo, eventType)
                             .handle { analysisResponse, exception ->
